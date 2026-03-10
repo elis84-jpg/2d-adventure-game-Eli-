@@ -3,46 +3,80 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class PlayerController : MonoBehaviour
 {
-    public InputAction MoveAction;
-    private Rigidbody2D rigidbody2D;
-    // Declare a Move variable;
-    Vector2 move;
+  // Variables related to player character movement
+  public InputAction MoveAction;
+  Rigidbody2D rigidbody2d;
+  Vector2 move;
+  public float speed = 3.0f;
 
-    //Health system variables
-    public int maxHealth = 5;
-    int currentHealth = 1;
 
-    //Character speed variable
-    public float speed = 3.0f;
-    
-   // currentHealth = MaxHealth;
-    void Start()
-    {
-        MoveAction.Enable();
-        // set rigidbody2d variable equal to rigidbody2d component
-        rigidbody2D = GetComponent<Rigidbody2D>();
+  // Variables related to the health system
+  public int maxHealth = 5;
+  int currentHealth;
+  public int health { get { return currentHealth; }}
 
-        currentHealth = maxHealth;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        move = MoveAction.ReadValue<Vector2>();
-        Debug.Log(move);
-    }
+  // Variables related to temporary invincibility
+  public float timeInvincible = 2.0f;
+  bool isInvincible;
+  float damageCooldown;
 
-    void FixedUpdate()
-    {
-        Vector2 position = (Vector2)rigidbody2D.position + move * speed * Time.deltaTime;
-        rigidbody2D.MovePosition(position);
-    }
 
-    public void ChangeHealth (int amount)
-    {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        Debug.Log(currentHealth + "/" + maxHealth);
-    }
+  // Start is called before the first frame update
+  void Start()
+  {
+     MoveAction.Enable();
+     rigidbody2d = GetComponent<Rigidbody2D>();
+
+
+     currentHealth = maxHealth;
+  }
+ 
+  // Update is called once per frame
+  void Update()
+  {
+     move = MoveAction.ReadValue<Vector2>();
+
+
+     if (isInvincible)
+       {
+           damageCooldown -= Time.deltaTime;
+           if (damageCooldown < 0)
+           {
+            isInvincible = false;
+           }
+               
+       }
+   }
+
+
+// FixedUpdate has the same call rate as the physics system
+  void FixedUpdate()
+  {
+     Vector2 position = (Vector2)rigidbody2d.position + move * speed * Time.deltaTime;
+     rigidbody2d.MovePosition(position);
+  }
+
+
+  public void ChangeHealth (int amount)
+  {
+     if (amount < 0)
+       {
+           if (isInvincible)
+           {
+            return;
+           }
+           isInvincible = true;
+           damageCooldown = timeInvincible;
+       }
+
+
+     currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+     UIHandler.instance.SetHealthValue(currentHealth / (float)maxHealth);
+  }
+
+
 }

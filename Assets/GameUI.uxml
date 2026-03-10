@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="HealthBarBackground" focusable="false" style="-unity-background-scale-mode: scale-to-fit; background-image: url(&apos;/Assets/Art/Ducko/UI/UIHealthFrame.png&apos;); width: 50%; height: 50%;">
+        <ui:VisualElement name="HealthBarContainer">
+            <ui:VisualElement name="HealthBar" style="background-image: url(&apos;/Assets/Art/Ducko/UI/UIHealthBar.png&apos;); width: 598px; height: 153px; position: absolute; top: 180px; left: 324px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="CharacterPortrait" style="background-image: url(&apos;/Assets/Art/Ruby/UI/CharacterPortrait.png&apos;); width: 358px; height: 404px; position: absolute; top: 40px; left: 84px;" />
+</ui:UXML>
