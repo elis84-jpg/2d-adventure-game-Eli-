@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyController : MonoBehaviour
 {
    // Public variables
-   public float speed = 10.0f;
+   public float speed;
    public bool vertical;
    public float changeTime = 3.0f;
   
    // Private variables
    Rigidbody2D rigidbody2d;
+   Animator animator;
    float timer;
    int direction = 1;
+   bool broken = true;
 
 
    // Start is called before the first frame update
    void Start()
    {
        rigidbody2d = GetComponent<Rigidbody2D>();
+       animator = GetComponent<Animator>();
        timer = changeTime;
    }
 
@@ -70,6 +74,14 @@ public class EnemyController : MonoBehaviour
        {
            player.ChangeHealth(-1);
        }
+   }
+   
+
+   public void Fix()
+   {
+    broken = false;
+    GetComponent<Rigidbody2D>().simulated = false;
+    animator.SetTrigger("Fixed");
    }
 
 

@@ -65,9 +65,14 @@
     <Compile Include="Assets/Scripts/UIHandler.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />
     <Compile Include="Assets/Scripts/CollectibleHealth.cs" />
+    <Compile Include="Assets/Hero Knight - Pixel Art/ColorSwap/ColorSwap_HeroKnight.cs" />
+    <Compile Include="Assets/Hero Knight - Pixel Art/Demo/HeroKnight.cs" />
+    <Compile Include="Assets/Hero Knight - Pixel Art/Demo/DestroyEvent_HeroKnight.cs" />
+    <Compile Include="Assets/Hero Knight - Pixel Art/Demo/Sensor_HeroKnight.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/GameUI.uxml" />
+    <None Include="Assets/Hero Knight - Pixel Art/ColorSwap/Sprites-ColorSwap.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -940,6 +945,14 @@
     </Reference>
     <Reference Include="UnityEngine.TextCoreTextEngineModule">
       <HintPath>Library/ScriptAssemblies/UnityEngine.TextCoreTextEngineModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Editor">

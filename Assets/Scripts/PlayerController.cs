@@ -6,6 +6,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject projectilePrefab;
+
+    // Talk action variable
+    public InputAction talkAction;
+
   // Variables related to player character movement
   public InputAction MoveAction;
   Rigidbody2D rigidbody2d;
@@ -24,21 +29,66 @@ public class PlayerController : MonoBehaviour
   bool isInvincible;
   float damageCooldown;
 
+  // Variables related to animation
+  Animator animator;
+  Vector2 moveDirection = new Vector2(1,0);
 
-  // Start is called before the first frame update
+  // Audio Source Variable declaration
+  AudioSource audioSource;
+
+
+
+
   void Start()
   {
-     MoveAction.Enable();
-     rigidbody2d = GetComponent<Rigidbody2D>();
+    //Storing Audio Source component referece in the variable
+    audioSource = GetComponent<AudioSource>();
+
+    talkAction.Enable();
+  }
+
+  // New Public function called PlaySound
+  public void PlaySound(AudioClip clip)
+  {
+    audioSource.PlayOneShot(clip);
+  }
+
+  void FindFriend()
+  {
+    RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, moveDirection, 1.5f, LayerMask.GetMask("NPC"));
+
+    if(hit.collider != null)
+    {
+        Debug.Log("Raycast has hit the object" + hit.collider.gameObject);
+    }
+  }
 
 
-     currentHealth = maxHealth;
+  // Start is called before the first frame update
+  void Awake()
+  {
+    MoveAction.Enable();
+    rigidbody2d = GetComponent<Rigidbody2D>();
+    animator = GetComponent<Animator>();
+    currentHealth = maxHealth;
   }
  
   // Update is called once per frame
   void Update()
   {
      move = MoveAction.ReadValue<Vector2>();
+
+    if(!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y,0.0f))
+    {
+      animator.SetInteger("AnimState", 1);
+        moveDirection.Set(move.x, move.y);
+        moveDirection.Normalize();
+    }
+
+    animator.SetInteger("AnimState", 0);
+    animator.SetBool("Grounded", true);
+    animator.SetFloat("Speed", move.magnitude);
+
 
 
      if (isInvincible)
@@ -50,10 +100,28 @@ public class PlayerController : MonoBehaviour
            }
                
        }
+
+       if(Input.GetKeyDown(KeyCode.C))
+       {
+        Launch();
+       }
+
+       // call "FrindFriend" when correct input.
+       if (Input.GetKeyDown(KeyCode.X))
+       {
+            FindFriend();
+       }
+   }
+
+   public void Launch(Vector2 direction, float force)
+   {
+    rigidbody2d.AddForce(direction * force);
    }
 
 
-// FixedUpdate has the same call rate as the physics system
+
+
+ // FixedUpdate has the same call rate as the physics system
   void FixedUpdate()
   {
      Vector2 position = (Vector2)rigidbody2d.position + move * speed * Time.deltaTime;
@@ -71,6 +139,7 @@ public class PlayerController : MonoBehaviour
            }
            isInvincible = true;
            damageCooldown = timeInvincible;
+           animator.SetTrigger("Hit");
        }
 
 
@@ -78,5 +147,14 @@ public class PlayerController : MonoBehaviour
      UIHandler.instance.SetHealthValue(currentHealth / (float)maxHealth);
   }
 
+    void Launch()
+    {
+        GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.75f, Quaternion.identity);
+
+        Projectile projectile = projectileObject.GetComponent<Projectile>();
+        projectile.Launch(moveDirection, 300);
+
+        animator.SetTrigger("Launch");
+    }
 
 }
