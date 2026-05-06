@@ -17,7 +17,7 @@ public class UIHandler : MonoBehaviour
 	//Start is called before the first frame update
 	void Start()
 	{
-		UIDocument uiDocument = GetComponent<UIDocument>();
+		UIDocument uiDocument = GetComponent<UIDocument>(); 
 		m_Healthbar = uiDocument.rootVisualElement.Q<VisualElement>("HealthBar");
 		SetHealthValue(1.0f);
 	}

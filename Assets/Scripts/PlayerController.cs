@@ -80,14 +80,32 @@ public class PlayerController : MonoBehaviour
 
     if(!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y,0.0f))
     {
-      animator.SetInteger("AnimState", 1);
         moveDirection.Set(move.x, move.y);
         moveDirection.Normalize();
     }
 
-    animator.SetInteger("AnimState", 0);
+    Debug.Log(move.x);
+
+    if(move.x < 0)
+    {
+      gameObject.GetComponent<SpriteRenderer>().flipX = true; 
+    }else if(move.x > 0)
+    {
+      gameObject.GetComponent<SpriteRenderer>().flipX = false; 
+    }
+
+    
     animator.SetBool("Grounded", true);
     animator.SetFloat("Speed", move.magnitude);
+
+    if(move.magnitude > 0)
+    {
+      animator.SetInteger("AnimState", 1);
+    }
+    else
+    {
+      animator.SetInteger("AnimState", 0);
+    }
 
 
 
